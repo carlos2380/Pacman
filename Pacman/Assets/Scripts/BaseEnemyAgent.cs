@@ -25,10 +25,10 @@ public class BaseEnemyAgent : MonoBehaviour
     {
         if(Mathf.Abs(agent.velocity.x) > Mathf.Abs(agent.velocity.z))
         {
-            transform.rotation = Quaternion.LookRotation(new Vector3(agent.velocity.x, 0, 0));
+            if(agent.velocity.x != 0) transform.rotation = Quaternion.LookRotation(new Vector3(agent.velocity.x, 0, 0));
         }else
         {
-            transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, agent.velocity.z));
+            if (agent.velocity.z != 0) transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, agent.velocity.z));
         }
 
         if(agent.hasPath == false && agent.pathPending == false)
@@ -44,5 +44,11 @@ public class BaseEnemyAgent : MonoBehaviour
                 agent.SetDestination(waypoint2.position);
             }
         }
+    }
+
+    public void port (Vector3 pos)
+    {
+        agent.nextPosition = pos;
+        gameObject.transform.position = pos;
     }
 }
