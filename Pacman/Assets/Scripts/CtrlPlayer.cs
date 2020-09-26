@@ -5,35 +5,62 @@ using UnityEngine;
 public class CtrlPlayer : MonoBehaviour
 {
     public float speed;
+
+    private float maxDistHit = 0.5f;
     private Vector3 velocity;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        velocity = new Vector3(1, 0, 0);
-        gameObject.transform.LookAt(velocity.normalized);
+        velocity = new Vector3(0, 0, 0);
     }
 
-    // Update is called once per frame
+
     void Update()
     {
+        updateVelocity();
         RaycastHit hit;
-        float maxDistHit = 0.5f;
+        bool stopForwad = false;
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, maxDistHit))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Did Hit");
+            if( hit.collider.gameObject.tag == "Collider")
+            {
+                stopForwad = true;
+            }
+            //Debug.Log("Did Hit");
         }
-        else
+       
+        if(stopForwad == false)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * maxDistHit, Color.white);
-            Debug.Log("Did not Hit");
+            // Debug.Log("Did not Hit");
             gameObject.transform.LookAt(velocity.normalized + transform.position);
             gameObject.transform.position += velocity * speed * Time.deltaTime;
-        }
-        
+        }        
     }
 
-
+    void updateVelocity()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        {
+            velocity = new Vector3(0, 0, 1);
+            gameObject.transform.LookAt(velocity.normalized + transform.position);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
+            velocity = new Vector3(0, 0, -1);
+            gameObject.transform.LookAt(velocity.normalized + transform.position);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        {
+            velocity = new Vector3(-1, 0, 0);
+            gameObject.transform.LookAt(velocity.normalized + transform.position);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        {
+            velocity = new Vector3(1, 0, 0);
+            gameObject.transform.LookAt(velocity.normalized + transform.position);
+        }
+    }
 }
