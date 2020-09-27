@@ -26,6 +26,9 @@ public class BaseEnemyAgent : MonoBehaviour
     //Escaping variables
     private GameObject player;
     private int heightZones = 8;
+    //Deading variables
+    [Header("Deading Propierties")]
+    public Vector3 waypointRespown;
 
     private StateEnemy lastStateEnemy;
     private NavMeshAgent agent;
@@ -68,6 +71,9 @@ public class BaseEnemyAgent : MonoBehaviour
             case StateEnemy.ESCAPE:
                 escape();
                 break;
+            case StateEnemy.DEADING:
+                deading();
+                break;
             default:
                 defaultMov();
                 break;
@@ -103,7 +109,8 @@ public class BaseEnemyAgent : MonoBehaviour
         timeStarting -= Time.deltaTime;
         if(timeStarting < 0)
         {
-            stateEnemy = StateEnemy.ESCAPE;
+            lastStateEnemy = StateEnemy.STARTING;
+            stateEnemy = StateEnemy.ATTACKING;
         }
     }
 
@@ -121,6 +128,11 @@ public class BaseEnemyAgent : MonoBehaviour
                 x = 2;
                 agent.SetDestination(waypoint2.position);
             }
+        }
+        if (Vector3.Distance(gameObject.transform.position, agent.destination) < 0.5f)
+        {
+            lastStateEnemy = stateEnemy;
+            stateEnemy = StateEnemy.DEADING;
         }
     }
 
@@ -165,6 +177,18 @@ public class BaseEnemyAgent : MonoBehaviour
         }
     }
 
+    private void deading()
+    {
+        if (agent.hasPath == false && agent.pathPending == false)
+        {  
+           agent.SetDestination(waypointRespown);   
+        }
+        if (Vector3.Distance(gameObject.transform.position, agent.destination) < 0.5f)
+        {
+            lastStateEnemy = stateEnemy;
+            stateEnemy = StateEnemy.ATTACKING;
+        }
+    }
     public void port (Vector3 pos)
     {
         agent.nextPosition = pos;
