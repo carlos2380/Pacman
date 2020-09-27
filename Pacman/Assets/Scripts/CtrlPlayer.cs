@@ -94,4 +94,9 @@ public class CtrlPlayer : MonoBehaviour
             //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
     }
+
+    public void port(Vector3 position)
+    {
+        gameObject.transform.position = position;
+    }
 }
