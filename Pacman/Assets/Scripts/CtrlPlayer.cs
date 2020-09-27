@@ -8,8 +8,12 @@ public class CtrlPlayer : MonoBehaviour
 
     private float maxDistHit = 0.5f;
     private Vector3 velocity;
-
-
+    //to check if player can go straight
+    private bool canStraight;
+    //to check if player can turn
+    private bool canLeftA, canLeftB, canUpA, canUpB;
+    private bool canDownA, canDownB, canRightA, canRightB;
+    private bool canTurnUp, canTurnDown, canTurnLeft, canTurnRight;
     void Start()
     {
         velocity = new Vector3(0, 0, 0);
@@ -18,49 +22,75 @@ public class CtrlPlayer : MonoBehaviour
 
     void Update()
     {
+        
+
+        checkDirections();
         updateVelocity();
-        RaycastHit hit;
-        bool stopForwad = false;
-        // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, maxDistHit))
+
+        if (canStraight == true)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            if( hit.collider.gameObject.tag == "Collider")
-            {
-                stopForwad = true;
-            }
-            //Debug.Log("Did Hit");
-        }
-       
-        if(stopForwad == false)
-        {
-            // Debug.Log("Did not Hit");
-            gameObject.transform.LookAt(velocity.normalized + transform.position);
             gameObject.transform.position += velocity * speed * Time.deltaTime;
         }        
     }
 
+    private void checkDirections()
+    {
+        canStraight = rayCastCheckDirectionIsEmpty(transform.position, velocity, maxDistHit);
+        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHit * 2);
+        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHit * 2);
+        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHit * 2);
+        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHit * 2);
+        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.left, maxDistHit * 2);
+        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.left, maxDistHit * 2);
+        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.right, maxDistHit * 2);
+        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.right, maxDistHit * 2);
+        canTurnUp = canUpA & canUpB;
+        canTurnDown = canDownA & canDownB;
+        canTurnLeft = canLeftA & canLeftB;
+        canTurnRight = canRightA & canRightB;
+    }
+
+    private bool rayCastCheckDirectionIsEmpty(Vector3 position, Vector3 direction, float distance)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(position, direction, out hit, distance))
+        {
+            Debug.DrawRay(position, direction * hit.distance, Color.yellow);
+            if (hit.collider.gameObject.tag == "Collider")
+            {
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            Debug.DrawRay(position, direction * 2, Color.blue);
+            // Debug.Log("Did not Hit");
+            return true;
+        }
+    }
+
     void updateVelocity()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        if (canTurnUp && (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             velocity = new Vector3(0, 0, 1);
-            gameObject.transform.LookAt(velocity.normalized + transform.position);
+            //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        else if (canTurnDown && (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)))
         {
             velocity = new Vector3(0, 0, -1);
-            gameObject.transform.LookAt(velocity.normalized + transform.position);
+            //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        else if (canTurnLeft && (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
         {
             velocity = new Vector3(-1, 0, 0);
-            gameObject.transform.LookAt(velocity.normalized + transform.position);
+            //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        else if (canTurnRight && (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
         {
             velocity = new Vector3(1, 0, 0);
-            gameObject.transform.LookAt(velocity.normalized + transform.position);
+            //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
     }
 }
