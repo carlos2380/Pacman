@@ -1237,10 +1237,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoint1: {fileID: 1470529403}
   waypoint2: {fileID: 1250020577}
+  mapMaxX: 25
+  mapMaxZ: 28
+  stateEnemy: 0
   waypointStarting1: {x: 13.33, y: 0.322, z: -14.666}
   waypointStarting2: {x: 13.33, y: 0.322, z: -12.47}
   timeStarting: 3
-  stateEnemy: 0
 --- !u!195 &92809196
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1735,10 +1737,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoint1: {fileID: 1470529403}
   waypoint2: {fileID: 1250020577}
+  mapMaxX: 25
+  mapMaxZ: 28
+  stateEnemy: 0
   waypointStarting1: {x: 11.89, y: 0.322, z: -14.666}
   waypointStarting2: {x: 11.89, y: 0.322, z: -12.47}
   timeStarting: 5
-  stateEnemy: 0
 --- !u!195 &127926249
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4754,10 +4758,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoint1: {fileID: 1470529403}
   waypoint2: {fileID: 1250020577}
+  mapMaxX: 25
+  mapMaxZ: 28
+  stateEnemy: 0
   waypointStarting1: {x: 14.75, y: 0.322, z: -14.666}
   waypointStarting2: {x: 14.75, y: 0.322, z: -12.47}
   timeStarting: 7
-  stateEnemy: 0
 --- !u!195 &336021832
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7413,10 +7419,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoint1: {fileID: 1470529403}
   waypoint2: {fileID: 1250020577}
+  mapMaxX: 25
+  mapMaxZ: 28
+  stateEnemy: 0
   waypointStarting1: {x: 10.671, y: 0.322, z: -14.666}
   waypointStarting2: {x: 10.671, y: 0.322, z: -12.47}
   timeStarting: 9
-  stateEnemy: 0
 --- !u!195 &514213039
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -12314,7 +12322,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898175666}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.48, y: 0.3, z: -22.51}
+  m_LocalPosition: {x: 13.5, y: 0.3, z: -22.5}
   m_LocalScale: {x: 0.9, y: 0.5, z: 0.90000004}
   m_Children: []
   m_Father: {fileID: 0}
