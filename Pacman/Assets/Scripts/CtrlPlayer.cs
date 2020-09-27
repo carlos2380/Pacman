@@ -6,7 +6,8 @@ public class CtrlPlayer : MonoBehaviour
 {
     public float speed;
 
-    private float maxDistHit = 0.5f;
+    private float maxDistHitStraiht = 0.5f;
+    private float maxDistHitTurn = 1f;
     private Vector3 velocity;
     //to check if player can go straight
     private bool canStraight;
@@ -35,15 +36,15 @@ public class CtrlPlayer : MonoBehaviour
 
     private void checkDirections()
     {
-        canStraight = rayCastCheckDirectionIsEmpty(transform.position, velocity, maxDistHit);
-        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHit * 2);
-        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHit * 2);
-        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHit * 2);
-        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHit * 2);
-        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.left, maxDistHit * 2);
-        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.left, maxDistHit * 2);
-        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.right, maxDistHit * 2);
-        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.right, maxDistHit * 2);
+        canStraight = rayCastCheckDirectionIsEmpty(transform.position, velocity, maxDistHitStraiht);
+        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.left, maxDistHitTurn);
+        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.left, maxDistHitTurn);
+        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.right, maxDistHitTurn);
+        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.right, maxDistHitTurn);
         canTurnUp = canUpA & canUpB;
         canTurnDown = canDownA & canDownB;
         canTurnLeft = canLeftA & canLeftB;
@@ -55,7 +56,7 @@ public class CtrlPlayer : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(position, direction, out hit, distance))
         {
-            Debug.DrawRay(position, direction * hit.distance, Color.yellow);
+            Debug.DrawRay(position, direction * hit.distance, Color.red);
             if (hit.collider.gameObject.tag == "Collider")
             {
                 return false;
@@ -64,7 +65,7 @@ public class CtrlPlayer : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(position, direction * 2, Color.blue);
+            Debug.DrawRay(position, direction * 2, Color.green);
             // Debug.Log("Did not Hit");
             return true;
         }
