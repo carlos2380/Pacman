@@ -38,7 +38,11 @@ public class BaseEnemyAgent : MonoBehaviour
     protected StateEnemy lastStateEnemy;
     protected NavMeshAgent agent;
     protected Vector3 startingPosition;
-
+    public Material materialEscape;
+    public Material materialDead;
+    public Material materialOriginal;
+    private Material actualMaterial;
+    private Renderer childRenderer;
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -49,6 +53,9 @@ public class BaseEnemyAgent : MonoBehaviour
         initTimeStarting = timeStarting;
         player = GameObject.FindGameObjectWithTag("Player");
         startingPosition = gameObject.transform.position;
+        childRenderer = gameObject.transform.GetChild(0).GetComponent<Renderer>();
+        actualMaterial = materialOriginal;
+        
     }
 
     // Update is called once per frame
@@ -93,12 +100,15 @@ public class BaseEnemyAgent : MonoBehaviour
             {
                 case StateEnemy.STARTING:
                 case StateEnemy.ATTACKING:
+                    changeMaterial(materialOriginal);
                     agent.speed = speedAttackingStarting;
                     break;
                 case StateEnemy.ESCAPE:
+                    changeMaterial(materialEscape);
                     agent.speed = speedEscaping;
                     break;
                 case StateEnemy.DEADING:
+                    changeMaterial(materialDead);
                     agent.speed = speedDeading;
                     break;
                 default:
@@ -216,6 +226,7 @@ public class BaseEnemyAgent : MonoBehaviour
     }
     public void respown()
     {
+        changeMaterial(materialOriginal);
         agent.nextPosition = startingPosition;
         agent.enabled = false;
         timeStarting = initTimeStarting;
@@ -250,10 +261,12 @@ public class BaseEnemyAgent : MonoBehaviour
 
     IEnumerator movmentUp()
     {
+        changeMaterial(materialOriginal);
         //Speed = time * dist; we know the speed and the dist;
         float totalTime = 1f;
         float time = 0;
         gameObject.transform.LookAt(Vector3.forward + gameObject.transform.position);
+        changeMaterial(materialOriginal);
         while (time <= totalTime)
         {
             time += Time.deltaTime;
@@ -267,5 +280,18 @@ public class BaseEnemyAgent : MonoBehaviour
         agent.speed = speedAttackingStarting;
     }
 
+    public void changeMaterial(Material mat)
+    {
+        Material[] materials = childRenderer.sharedMaterials;
+        for (int i = 0; i < materials.Length; ++i)
+        {
+            if (materials[i].Equals(actualMaterial))
+            {
+                materials[i] = mat;
+            }
+        }
+        childRenderer.sharedMaterials = materials;
+        actualMaterial = mat;
+    }
     
 }
