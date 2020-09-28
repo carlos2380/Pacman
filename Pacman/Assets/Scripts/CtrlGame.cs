@@ -15,14 +15,17 @@ public class CtrlGame : MonoBehaviour
     [System.NonSerialized]
     public bool powerUp;
     public Light lightRed;
+    public CtrlMenu ctrlMenu;
     private float nowTimePowerUp;
     private float partialTime = 1f;
+    private CtrlResult ctrlResult;
     // Start is called before the first frame update
     void Start()
     {
         powerUp = false;
         numDots = groupDots.transform.childCount;
         ctrlPlayer = GetComponent<CtrlPlayer>();
+        ctrlResult = GameObject.FindGameObjectWithTag("Result").GetComponent<CtrlResult>();
         closeDoor();
     }
    
@@ -61,7 +64,8 @@ public class CtrlGame : MonoBehaviour
 
     public void win()
     {
-        Debug.Log("YOU WIN!!!!!");
+        ctrlResult.result = CtrlResult.CanvasResult.WIN;
+        ctrlMenu.goMainMenu();
     }
 
     public void setEnemiesToEscape()
@@ -102,7 +106,8 @@ public class CtrlGame : MonoBehaviour
 
     private void lose()
     {
-        Debug.Log("LOSEEE!!!!!");
+        ctrlResult.result = CtrlResult.CanvasResult.LOSE;
+        ctrlMenu.goMainMenu();
     }
 
     private void closeDoor()

@@ -9,6 +9,7 @@ TagManager:
   - Power
   - Pacdot
   - ModelPacman
+  - Result
   layers:
   - Default
   - TransparentFX
