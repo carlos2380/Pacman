@@ -14,7 +14,7 @@ NavMeshProjectSettings:
   - name: Teleport
     cost: 1
   - name: 
-    cost: 1
+    cost: 0
   - name: 
     cost: 1
   - name: 

@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class BaseEnemyAgent : MonoBehaviour
 {
-    public Transform waypoint1;
-    public Transform waypoint2;
     //Size of level 
     public int mapMaxX = 25;
     public int mapMaxZ = 28;
@@ -21,28 +19,23 @@ public class BaseEnemyAgent : MonoBehaviour
     public Vector3 waypointStarting1;
     public Vector3 waypointStarting2;
     public float timeStarting;
-    private float initTimeStarting;
-    private bool selectorStartingPosition;
+    protected float initTimeStarting;
+    protected bool selectorStartingPosition;
     //Escaping variables
-    private GameObject player;
-    private int heightZones = 8;
+    protected GameObject player;
+    protected int heightZones = 8;
     //Deading variables
     [Header("Deading Propierties")]
     public Vector3 waypointRespown;
 
-    private StateEnemy lastStateEnemy;
-    private NavMeshAgent agent;
+    protected StateEnemy lastStateEnemy;
+    protected NavMeshAgent agent;
 
-    
-
-
-    private int x;
-    void Start()
+    protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
-        //agent.SetDestination(waypoint2.position);
-        x = 2;
+
         lastStateEnemy = StateEnemy.STARTING;
         selectorStartingPosition = false;
         initTimeStarting = timeStarting;
@@ -50,15 +43,11 @@ public class BaseEnemyAgent : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         //Update State
-       
-        if(lastStateEnemy != stateEnemy)
-        {
-            agent.ResetPath();
-            lastStateEnemy = stateEnemy;
-        }
+
+        updateStateAndIfResetPath();
 
         switch (stateEnemy)
         {
@@ -66,7 +55,7 @@ public class BaseEnemyAgent : MonoBehaviour
                 starting();
                 break;
             case StateEnemy.ATTACKING:
-                defaultMov();
+                attacking();
                 break;
             case StateEnemy.ESCAPE:
                 escape();
@@ -75,24 +64,36 @@ public class BaseEnemyAgent : MonoBehaviour
                 deading();
                 break;
             default:
-                defaultMov();
+                attacking();
                 break;
         }
 
-       
+
         //FIX LOOKROTATION
+        FixLookRotation();
+    }
+
+    protected void updateStateAndIfResetPath()
+    {
+        if (lastStateEnemy != stateEnemy)
+        {
+            agent.ResetPath();
+            lastStateEnemy = stateEnemy;
+        }
+    }
+
+    protected void FixLookRotation()
+    {
         if (Mathf.Abs(agent.velocity.x) > Mathf.Abs(agent.velocity.z))
         {
-            if(agent.velocity.x != 0) transform.rotation = Quaternion.LookRotation(new Vector3(agent.velocity.x, 0, 0));
-        }else
+            if (agent.velocity.x != 0) transform.rotation = Quaternion.LookRotation(new Vector3(agent.velocity.x, 0, 0));
+        }
+        else
         {
             if (agent.velocity.z != 0) transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, agent.velocity.z));
         }
-
-        
     }
-
-    private void starting()
+    protected void starting()
     {
         if (agent.hasPath == false && agent.pathPending == false)
         {
@@ -114,31 +115,14 @@ public class BaseEnemyAgent : MonoBehaviour
         }
     }
 
-    private void defaultMov()
+    public virtual void attacking()
     {
-        if (agent.hasPath == false && agent.pathPending == false)
-        {
-            if (x == 2)
-            {
-                agent.SetDestination(waypoint1.position);
-                x = 1;
-            }
-            else
-            {
-                x = 2;
-                agent.SetDestination(waypoint2.position);
-            }
-        }
-        if (Vector3.Distance(gameObject.transform.position, agent.destination) < 0.5f)
-        {
-            lastStateEnemy = stateEnemy;
-            stateEnemy = StateEnemy.DEADING;
-        }
+        
     }
 
     //Divide de map in 4 zones and check that the destination is different of the 
     //Player position, if is the same change the zone to the oposite.
-    private void escape()
+    protected void escape()
     {
         if (agent.hasPath == false && agent.pathPending == false)
         {
@@ -177,7 +161,7 @@ public class BaseEnemyAgent : MonoBehaviour
         }
     }
 
-    private void deading()
+    protected void deading()
     {
         if (agent.hasPath == false && agent.pathPending == false)
         {  
