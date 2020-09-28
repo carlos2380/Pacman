@@ -14,7 +14,9 @@ public class CtrlGame : MonoBehaviour
     public float timePowerUp;
     [System.NonSerialized]
     public bool powerUp;
+    public Light lightRed;
     private float nowTimePowerUp;
+    private float partialTime = 1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,19 +25,31 @@ public class CtrlGame : MonoBehaviour
         ctrlPlayer = GetComponent<CtrlPlayer>();
         closeDoor();
     }
-
+   
     void Update()
     {
-        if(powerUp == true)
+        
+        if (powerUp == true)
         {
             nowTimePowerUp -= Time.deltaTime;
+            if(nowTimePowerUp < 3f)
+            {
+                partialTime += Time.deltaTime;
+                if (partialTime > 0.25f)
+                {
+                    partialTime = 0f;
+                    lightRed.enabled = !lightRed.enabled;
+                }
+            }
             if(nowTimePowerUp < 0)
             {
+                lightRed.enabled = false;
                 powerUp = false;
                 setEnemiesToAttack();
             }
         }
     }
+
     public void dotEated()
     {
         --numDots;
