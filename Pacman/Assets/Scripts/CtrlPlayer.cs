@@ -15,9 +15,12 @@ public class CtrlPlayer : MonoBehaviour
     private bool canLeftA, canLeftB, canUpA, canUpB;
     private bool canDownA, canDownB, canRightA, canRightB;
     private bool canTurnUp, canTurnDown, canTurnLeft, canTurnRight;
+
+    private CtrlGame ctrlGame;
     void Start()
     {
         velocity = new Vector3(0, 0, 0);
+        ctrlGame = GetComponent<CtrlGame>();
     }
 
 
@@ -104,6 +107,7 @@ public class CtrlPlayer : MonoBehaviour
     {
         if(other.gameObject.tag == "Pacdot")
         {
+            ctrlGame.dotEated();
             Destroy(other.gameObject);
         } 
     }
