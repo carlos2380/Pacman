@@ -18,17 +18,25 @@ public class CtrlPlayer : MonoBehaviour
 
     private CtrlGame ctrlGame;
     private Vector3 startingPosition;
+    //touchscreen
+    private Vector2 startPosTouch;
+    private Vector2 directionTouch;
+    private bool movmentTouch;
+    private bool goUp, goDown, goLeft, goRight;
+
     void Start()
     {
         velocity = new Vector3(0, 0, 0);
         ctrlGame = GetComponent<CtrlGame>();
         startingPosition = gameObject.transform.position;
+        goUp = goDown = goLeft = goRight = false;
     }
 
 
     void Update()
     {
         checkDirections();
+        updateTouchScreen();
         updateVelocity();
 
         if (canStraight == true)
@@ -40,18 +48,67 @@ public class CtrlPlayer : MonoBehaviour
     private void checkDirections()
     {
         canStraight = rayCastCheckDirectionIsEmpty(transform.position, velocity, maxDistHitStraiht);
-        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
-        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
-        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
-        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.48f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
-        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.left, maxDistHitTurn);
-        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.left, maxDistHitTurn);
-        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.48f) + transform.position, Vector3.right, maxDistHitTurn);
-        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.48f) + transform.position, Vector3.right, maxDistHitTurn);
+        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.45f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.45f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.45f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.45f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.45f) + transform.position, Vector3.left, maxDistHitTurn);
+        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.45f) + transform.position, Vector3.left, maxDistHitTurn);
+        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.45f) + transform.position, Vector3.right, maxDistHitTurn);
+        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.45f) + transform.position, Vector3.right, maxDistHitTurn);
         canTurnUp = canUpA & canUpB;
         canTurnDown = canDownA & canDownB;
         canTurnLeft = canLeftA & canLeftB;
         canTurnRight = canRightA & canRightB;
+    }
+
+    private void updateTouchScreen()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startPosTouch = touch.position;
+                    movmentTouch = false;
+                    break;
+                case TouchPhase.Moved:
+                    directionTouch = touch.position - startPosTouch;
+                    break;
+
+                case TouchPhase.Ended:
+                    movmentTouch = true;
+                    break;
+            }
+        }
+        if (movmentTouch)
+        {
+            movmentTouch = false;
+            goUp = goDown = goLeft = goRight = false;
+            if (Mathf.Abs(directionTouch.x) > Mathf.Abs(directionTouch.y))
+            {
+                if(directionTouch.x > 0)
+                {
+                    goRight = true;
+                }
+                else
+                {
+                    goLeft = true;
+                }
+            }
+            else
+            {
+                if (directionTouch.y > 0)
+                {
+                    goUp = true;
+                }
+                else
+                {
+                    goDown = true;
+                }
+            }
+        }
     }
 
     private bool rayCastCheckDirectionIsEmpty(Vector3 position, Vector3 direction, float distance)
@@ -76,22 +133,22 @@ public class CtrlPlayer : MonoBehaviour
 
     void updateVelocity()
     {
-        if (canTurnUp && (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
+        if (canTurnUp && (goUp || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             velocity = new Vector3(0, 0, 1);
             //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (canTurnDown && (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)))
+        else if (canTurnDown && (goDown || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)))
         {
             velocity = new Vector3(0, 0, -1);
             //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (canTurnLeft && (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
+        else if (canTurnLeft && (goLeft || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
         {
             velocity = new Vector3(-1, 0, 0);
             //gameObject.transform.LookAt(velocity.normalized + transform.position);
         }
-        else if (canTurnRight && (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
+        else if (canTurnRight && (goRight || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
         {
             velocity = new Vector3(1, 0, 0);
             //gameObject.transform.LookAt(velocity.normalized + transform.position);
