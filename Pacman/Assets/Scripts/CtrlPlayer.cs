@@ -24,10 +24,10 @@ public class CtrlPlayer : MonoBehaviour
     private bool movmentTouch;
     private bool goUp, goDown, goLeft, goRight;
     private GameObject modelPacman;
-
+    private Animator anim;
     void Start()
     {
-        velocity = new Vector3(0, 0, 0);
+        velocity = new Vector3(0, 0, 1);
         ctrlGame = GetComponent<CtrlGame>();
         startingPosition = gameObject.transform.position;
         goUp = goDown = goLeft = goRight = false;
@@ -36,8 +36,10 @@ public class CtrlPlayer : MonoBehaviour
             if(gameObject.transform.GetChild(i).tag == "ModelPacman")
             {
                 modelPacman = gameObject.transform.GetChild(i).gameObject;
+                anim = gameObject.transform.GetChild(i).gameObject.transform.GetChild(0).GetComponent<Animator>();
             }
         }
+        anim.SetBool("moving", false);
     }
 
 
@@ -50,6 +52,10 @@ public class CtrlPlayer : MonoBehaviour
         if (canStraight == true)
         {
             gameObject.transform.position += velocity * speed * Time.deltaTime;
+            anim.SetBool("moving", true);
+        }else
+        {
+            anim.SetBool("moving", false);
         }        
     }
 
@@ -195,7 +201,8 @@ public class CtrlPlayer : MonoBehaviour
 
     public void respown()
     {
-        velocity = new Vector3(0, 0, 0);
+        velocity = new Vector3(0, 0, 1);
+        anim.SetBool("moving", false);
         gameObject.transform.position = startingPosition;
     }
 }
