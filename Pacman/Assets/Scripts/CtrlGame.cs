@@ -101,9 +101,12 @@ public class CtrlGame : MonoBehaviour
     {
         yield return new WaitForSeconds(timeToCloseDoor);
         door.SetActive(true);
-        for (int i = 0; i < enemies.Length; ++i)
+        if(powerUp == false)
         {
-            enemies[i].GetComponent<BaseEnemyAgent>().stateEnemy = BaseEnemyAgent.StateEnemy.ATTACKING;
+            for (int i = 0; i < enemies.Length; ++i)
+            {
+                enemies[i].GetComponent<BaseEnemyAgent>().stateEnemy = BaseEnemyAgent.StateEnemy.ATTACKING;
+            }
         }
     }
 }
