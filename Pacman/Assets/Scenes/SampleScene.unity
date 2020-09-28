@@ -12797,6 +12797,7 @@ MonoBehaviour:
   - {fileID: 127926247}
   - {fileID: 92809194}
   - {fileID: 514213037}
+  numLifes: 10
   timePowerUp: 10
 --- !u!1001 &898702956
 PrefabInstance:

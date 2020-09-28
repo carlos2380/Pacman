@@ -32,6 +32,7 @@ public class BaseEnemyAgent : MonoBehaviour
     public float speedDeading;
     protected StateEnemy lastStateEnemy;
     protected NavMeshAgent agent;
+    protected Vector3 startingPosition;
 
     protected virtual void Start()
     {
@@ -42,6 +43,7 @@ public class BaseEnemyAgent : MonoBehaviour
         selectorStartingPosition = false;
         initTimeStarting = timeStarting;
         player = GameObject.FindGameObjectWithTag("Player");
+        startingPosition = gameObject.transform.position;
     }
 
     // Update is called once per frame
@@ -195,5 +197,22 @@ public class BaseEnemyAgent : MonoBehaviour
     {
         agent.nextPosition = pos;
         gameObject.transform.position = pos;
+    }
+    public void respown()
+    {
+        agent.nextPosition = startingPosition;
+        agent.enabled = false;
+        timeStarting = initTimeStarting;
+        gameObject.transform.position = startingPosition;
+        StartCoroutine(ExampleCoroutine());
+    }
+
+    IEnumerator ExampleCoroutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+        agent.enabled = true;
+        agent.nextPosition = startingPosition;
+        gameObject.transform.position = startingPosition;
+        stateEnemy = StateEnemy.STARTING;
     }
 }

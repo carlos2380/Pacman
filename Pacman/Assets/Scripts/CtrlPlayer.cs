@@ -17,17 +17,17 @@ public class CtrlPlayer : MonoBehaviour
     private bool canTurnUp, canTurnDown, canTurnLeft, canTurnRight;
 
     private CtrlGame ctrlGame;
+    private Vector3 startingPosition;
     void Start()
     {
         velocity = new Vector3(0, 0, 0);
         ctrlGame = GetComponent<CtrlGame>();
+        startingPosition = gameObject.transform.position;
     }
 
 
     void Update()
     {
-        
-
         checkDirections();
         updateVelocity();
 
@@ -115,5 +115,21 @@ public class CtrlPlayer : MonoBehaviour
             ctrlGame.setEnemiesToEscape();
             Destroy(other.gameObject);
         }
+        else if (other.gameObject.tag == "Enemy")
+        {
+            if(ctrlGame.powerUp == true)
+            {
+
+            }else
+            {
+                ctrlGame.loseLife();
+            }
+        }
+    }
+
+    public void respown()
+    {
+        velocity = new Vector3(0, 0, 0);
+        gameObject.transform.position = startingPosition;
     }
 }

@@ -6,15 +6,19 @@ public class CtrlGame : MonoBehaviour
 {
     public GameObject groupDots;
     public GameObject[] enemies;
+    public int numLifes;
+    private CtrlPlayer ctrlPlayer;
     private int numDots;
     public float timePowerUp;
-    private bool powerUp;
+    [System.NonSerialized]
+    public bool powerUp;
     private float nowTimePowerUp;
     // Start is called before the first frame update
     void Start()
     {
         powerUp = false;
         numDots = groupDots.transform.childCount;
+        ctrlPlayer = GetComponent<CtrlPlayer>();
     }
 
     void Update()
@@ -59,5 +63,26 @@ public class CtrlGame : MonoBehaviour
         {
             enemies[i].GetComponent<BaseEnemyAgent>().stateEnemy = BaseEnemyAgent.StateEnemy.ATTACKING;
         }
+    }
+
+    public void loseLife()
+    {
+        --numLifes;
+        if(numLifes < 0)
+        {
+            lose();
+        }else
+        {
+            for (int i = 0; i < enemies.Length; ++i)
+            {
+                enemies[i].GetComponent<BaseEnemyAgent>().respown();
+            }
+            ctrlPlayer.respown();
+        }
+    }
+
+    private void lose()
+    {
+        Debug.Log("LOSEEE!!!!!");
     }
 }

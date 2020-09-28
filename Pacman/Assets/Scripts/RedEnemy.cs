@@ -11,28 +11,31 @@ public class RedEnemy : BaseEnemyAgent
     }
     protected override void Update()
     {
-        updateStateAndIfResetPath();
-
-        switch (stateEnemy)
+        if(agent.enabled == true)
         {
-            case StateEnemy.STARTING:
-                starting();
-                break;
-            case StateEnemy.ATTACKING:
-                attacking();
-                break;
-            case StateEnemy.ESCAPE:
-                escape();
-                break;
-            case StateEnemy.DEADING:
-                deading();
-                break;
-            default:
-                attacking();
-                break;
+            updateStateAndIfResetPath();
+
+            switch (stateEnemy)
+            {
+                case StateEnemy.STARTING:
+                    starting();
+                    break;
+                case StateEnemy.ATTACKING:
+                    attacking();
+                    break;
+                case StateEnemy.ESCAPE:
+                    escape();
+                    break;
+                case StateEnemy.DEADING:
+                    deading();
+                    break;
+                default:
+                    attacking();
+                    break;
+            }
+            FixLookRotation();
         }
-        //FIX LOOKROTATION
-        FixLookRotation();
+        
     }
 
     public override void attacking()
