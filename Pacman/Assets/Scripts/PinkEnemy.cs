@@ -20,6 +20,9 @@ public class PinkEnemy : BaseEnemyAgent
                 case StateEnemy.STARTING:
                     starting();
                     break;
+                case StateEnemy.FIRSTWAY:
+                    firstway();
+                    break;
                 case StateEnemy.ATTACKING:
                     attacking();
                     break;

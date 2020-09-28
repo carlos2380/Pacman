@@ -11,7 +11,7 @@ public class BaseEnemyAgent : MonoBehaviour
     //States
     public enum StateEnemy
     {
-        STARTING, ATTACKING, ESCAPE, DEADING
+        STARTING, FIRSTWAY, ATTACKING, ESCAPE, DEADING
     };
     public StateEnemy stateEnemy = StateEnemy.STARTING;
     //Starting variables
@@ -21,6 +21,9 @@ public class BaseEnemyAgent : MonoBehaviour
     public float timeStarting;
     protected float initTimeStarting;
     protected bool selectorStartingPosition;
+    //First position to block the respown
+    [Header("First position to visit")]
+    public Vector3 firstWaypoint;
     //Escaping variables
     protected GameObject player;
     protected int heightZones = 8;
@@ -49,32 +52,33 @@ public class BaseEnemyAgent : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        //Update State
-
-        updateStateAndIfResetPath();
-
-        switch (stateEnemy)
+        if (agent.enabled == true)
         {
-            case StateEnemy.STARTING:
-                starting();
-                break;
-            case StateEnemy.ATTACKING:
-                attacking();
-                break;
-            case StateEnemy.ESCAPE:
-                escape();
-                break;
-            case StateEnemy.DEADING:
-                deading();
-                break;
-            default:
-                attacking();
-                break;
+            updateStateAndIfResetPath();
+
+            switch (stateEnemy)
+            {
+                case StateEnemy.STARTING:
+                    starting();
+                    break;
+                case StateEnemy.FIRSTWAY:
+                    firstway();
+                    break;
+                case StateEnemy.ATTACKING:
+                    attacking();
+                    break;
+                case StateEnemy.ESCAPE:
+                    escape();
+                    break;
+                case StateEnemy.DEADING:
+                    deading();
+                    break;
+                default:
+                    attacking();
+                    break;
+            }
+            FixLookRotation();
         }
-
-
-        //FIX LOOKROTATION
-        FixLookRotation();
     }
 
     protected void updateStateAndIfResetPath()
@@ -131,10 +135,17 @@ public class BaseEnemyAgent : MonoBehaviour
         if(timeStarting < 0)
         {
             lastStateEnemy = StateEnemy.STARTING;
-            stateEnemy = StateEnemy.ATTACKING;
+            stateEnemy = StateEnemy.FIRSTWAY;
         }
     }
-
+    protected void firstway()
+    {
+        if (agent.hasPath == false && agent.pathPending == false)
+        {
+            agent.SetDestination(firstWaypoint);
+        }
+        timeStarting -= Time.deltaTime;
+    }
     public virtual void attacking()
     {
         
@@ -204,10 +215,10 @@ public class BaseEnemyAgent : MonoBehaviour
         agent.enabled = false;
         timeStarting = initTimeStarting;
         gameObject.transform.position = startingPosition;
-        StartCoroutine(ExampleCoroutine());
+        StartCoroutine(respownCoroutine());
     }
 
-    IEnumerator ExampleCoroutine()
+    IEnumerator respownCoroutine()
     {
         yield return new WaitForSeconds(0.25f);
         agent.enabled = true;

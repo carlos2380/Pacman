@@ -11,7 +11,7 @@ public class RedEnemy : BaseEnemyAgent
     }
     protected override void Update()
     {
-        if(agent.enabled == true)
+        if (agent.enabled == true)
         {
             updateStateAndIfResetPath();
 
@@ -19,6 +19,9 @@ public class RedEnemy : BaseEnemyAgent
             {
                 case StateEnemy.STARTING:
                     starting();
+                    break;
+                case StateEnemy.FIRSTWAY:
+                    firstway();
                     break;
                 case StateEnemy.ATTACKING:
                     attacking();
@@ -35,7 +38,7 @@ public class RedEnemy : BaseEnemyAgent
             }
             FixLookRotation();
         }
-        
+
     }
 
     public override void attacking()
