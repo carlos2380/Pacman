@@ -27,7 +27,9 @@ public class BaseEnemyAgent : MonoBehaviour
     //Deading variables
     [Header("Deading Propierties")]
     public Vector3 waypointRespown;
-
+    public float speedAttackingStarting;
+    public float speedEscaping;
+    public float speedDeading;
     protected StateEnemy lastStateEnemy;
     protected NavMeshAgent agent;
 
@@ -79,6 +81,22 @@ public class BaseEnemyAgent : MonoBehaviour
         {
             agent.ResetPath();
             lastStateEnemy = stateEnemy;
+            switch (stateEnemy)
+            {
+                case StateEnemy.STARTING:
+                case StateEnemy.ATTACKING:
+                    agent.speed = speedAttackingStarting;
+                    break;
+                case StateEnemy.ESCAPE:
+                    agent.speed = speedEscaping;
+                    break;
+                case StateEnemy.DEADING:
+                    agent.speed = speedDeading;
+                    break;
+                default:
+                    agent.speed = speedAttackingStarting;
+                    break;
+            }
         }
     }
 

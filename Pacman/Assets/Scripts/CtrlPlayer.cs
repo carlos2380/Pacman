@@ -109,6 +109,11 @@ public class CtrlPlayer : MonoBehaviour
         {
             ctrlGame.dotEated();
             Destroy(other.gameObject);
-        } 
+        }
+        else if (other.gameObject.tag == "Power")
+        {
+            ctrlGame.setEnemiesToEscape();
+            Destroy(other.gameObject);
+        }
     }
 }

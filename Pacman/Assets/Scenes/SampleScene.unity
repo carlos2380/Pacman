@@ -1332,6 +1332,9 @@ MonoBehaviour:
   waypointStarting2: {x: 13.33, y: 0.322, z: -12.47}
   timeStarting: 3
   waypointRespown: {x: 13, y: 0, z: -13.5}
+  speedAttackingStarting: 3.5
+  speedEscaping: 1.5
+  speedDeading: 10
 --- !u!195 &92809196
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1831,6 +1834,9 @@ MonoBehaviour:
   waypointStarting2: {x: 11.89, y: 0.322, z: -12.47}
   timeStarting: 5
   waypointRespown: {x: 13, y: 0, z: -13.5}
+  speedAttackingStarting: 3.5
+  speedEscaping: 1.5
+  speedDeading: 10
   transfPositionsPower:
   - {fileID: 767561304482360624}
   - {fileID: 8811650241360407297}
@@ -4946,6 +4952,9 @@ MonoBehaviour:
   waypointStarting2: {x: 14.75, y: 0.322, z: -12.47}
   timeStarting: 7
   waypointRespown: {x: 13, y: 0, z: -13.5}
+  speedAttackingStarting: 3.5
+  speedEscaping: 1.5
+  speedDeading: 10
 --- !u!195 &336021832
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7701,6 +7710,9 @@ MonoBehaviour:
   waypointStarting2: {x: 10.671, y: 0.322, z: -12.47}
   timeStarting: 9
   waypointRespown: {x: 13, y: 0, z: -13.5}
+  speedAttackingStarting: 3.5
+  speedEscaping: 1.5
+  speedDeading: 10
   MaxDistToAttack: 5
 --- !u!1001 &520867969
 PrefabInstance:
@@ -12780,6 +12792,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupDots: {fileID: 1009746697}
+  enemies:
+  - {fileID: 336021830}
+  - {fileID: 127926247}
+  - {fileID: 92809194}
+  - {fileID: 514213037}
+  timePowerUp: 10
 --- !u!1001 &898702956
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,11 +5,17 @@ using UnityEngine;
 public class YellowEnemy : BaseEnemyAgent
 {
     public Transform[] transfPositionsPower;
+    private Vector3[] positionsPower;
     private int lastPosition;
     protected override void Start()
     {
         base.Start();
         lastPosition = 0;
+        positionsPower = new Vector3[transfPositionsPower.Length];
+        for (int i = 0; i < transfPositionsPower.Length; ++i)
+        {
+            positionsPower[i] = transfPositionsPower[i].position;
+        }
     }
     protected override void Update()
     {
@@ -41,7 +47,7 @@ public class YellowEnemy : BaseEnemyAgent
     {
         if (agent.hasPath == false && agent.pathPending == false)
         {
-            agent.SetDestination(transfPositionsPower[(lastPosition+Random.Range(1, transfPositionsPower.Length -1)) % transfPositionsPower.Length].position);
+            agent.SetDestination(positionsPower[(lastPosition+Random.Range(1, positionsPower.Length -1)) % positionsPower.Length]);
         }
     }
 }
