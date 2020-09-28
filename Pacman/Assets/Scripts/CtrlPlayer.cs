@@ -23,6 +23,7 @@ public class CtrlPlayer : MonoBehaviour
     private Vector2 directionTouch;
     private bool movmentTouch;
     private bool goUp, goDown, goLeft, goRight;
+    private GameObject modelPacman;
 
     void Start()
     {
@@ -30,6 +31,13 @@ public class CtrlPlayer : MonoBehaviour
         ctrlGame = GetComponent<CtrlGame>();
         startingPosition = gameObject.transform.position;
         goUp = goDown = goLeft = goRight = false;
+        for(int i = 0; i < gameObject.transform.childCount; ++i)
+        {
+            if(gameObject.transform.GetChild(i).tag == "ModelPacman")
+            {
+                modelPacman = gameObject.transform.GetChild(i).gameObject;
+            }
+        }
     }
 
 
@@ -136,22 +144,22 @@ public class CtrlPlayer : MonoBehaviour
         if (canTurnUp && (goUp || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             velocity = new Vector3(0, 0, 1);
-            //gameObject.transform.LookAt(velocity.normalized + transform.position);
+            modelPacman.transform.LookAt(velocity.normalized + transform.position);
         }
         else if (canTurnDown && (goDown || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)))
         {
             velocity = new Vector3(0, 0, -1);
-            //gameObject.transform.LookAt(velocity.normalized + transform.position);
+            modelPacman.transform.LookAt(velocity.normalized + transform.position);
         }
         else if (canTurnLeft && (goLeft || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
         {
             velocity = new Vector3(-1, 0, 0);
-            //gameObject.transform.LookAt(velocity.normalized + transform.position);
+            modelPacman.transform.LookAt(velocity.normalized + transform.position);
         }
         else if (canTurnRight && (goRight || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
         {
             velocity = new Vector3(1, 0, 0);
-            //gameObject.transform.LookAt(velocity.normalized + transform.position);
+            modelPacman.transform.LookAt(velocity.normalized + transform.position);
         }
     }
 
