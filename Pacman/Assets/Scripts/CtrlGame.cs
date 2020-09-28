@@ -19,6 +19,8 @@ public class CtrlGame : MonoBehaviour
     private float nowTimePowerUp;
     private float partialTime = 1f;
     private CtrlResult ctrlResult;
+    public GameObject[] iconLifes;
+    private int indexIcon;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,7 @@ public class CtrlGame : MonoBehaviour
         ctrlPlayer = GetComponent<CtrlPlayer>();
         ctrlResult = GameObject.FindGameObjectWithTag("Result").GetComponent<CtrlResult>();
         closeDoor();
+        indexIcon = 0;
     }
    
     void Update()
@@ -89,7 +92,12 @@ public class CtrlGame : MonoBehaviour
     public void loseLife()
     {
         --numLifes;
-        if(numLifes < 0)
+        if(indexIcon < iconLifes.Length)
+        {
+            iconLifes[indexIcon].SetActive(false);
+            ++indexIcon;
+        }
+        if(numLifes <= 0)
         {
             lose();
         }else

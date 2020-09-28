@@ -64,14 +64,14 @@ public class CtrlPlayer : MonoBehaviour
     private void checkDirections()
     {
         canStraight = rayCastCheckDirectionIsEmpty(transform.position, velocity, maxDistHitStraiht);
-        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.45f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
-        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.45f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
-        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.45f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
-        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.45f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
-        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.45f) + transform.position, Vector3.left, maxDistHitTurn);
-        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.45f) + transform.position, Vector3.left, maxDistHitTurn);
-        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.45f) + transform.position, Vector3.right, maxDistHitTurn);
-        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.45f) + transform.position, Vector3.right, maxDistHitTurn);
+        canUpA = rayCastCheckDirectionIsEmpty(new Vector3(0.4f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canUpB = rayCastCheckDirectionIsEmpty(new Vector3(-0.4f, 0f, 0f) + transform.position, Vector3.forward, maxDistHitTurn);
+        canDownA = rayCastCheckDirectionIsEmpty(new Vector3(0.4f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canDownB = rayCastCheckDirectionIsEmpty(new Vector3(-0.4f, 0f, 0f) + transform.position, Vector3.back, maxDistHitTurn);
+        canLeftA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.4f) + transform.position, Vector3.left, maxDistHitTurn);
+        canLeftB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.4f) + transform.position, Vector3.left, maxDistHitTurn);
+        canRightA = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, 0.4f) + transform.position, Vector3.right, maxDistHitTurn);
+        canRightB = rayCastCheckDirectionIsEmpty(new Vector3(0f, 0f, -0.4f) + transform.position, Vector3.right, maxDistHitTurn);
         canTurnUp = canUpA & canUpB;
         canTurnDown = canDownA & canDownB;
         canTurnLeft = canLeftA & canLeftB;
