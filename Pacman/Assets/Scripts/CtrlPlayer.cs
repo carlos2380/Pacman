@@ -25,6 +25,7 @@ public class CtrlPlayer : MonoBehaviour
     private bool goUp, goDown, goLeft, goRight;
     private GameObject modelPacman;
     private Animator anim;
+    private CtrlSound ctrlSound;
     void Start()
     {
         velocity = new Vector3(0, 0, 1);
@@ -40,6 +41,7 @@ public class CtrlPlayer : MonoBehaviour
             }
         }
         anim.SetBool("moving", false);
+        ctrlSound = GetComponent<CtrlSound>();
     }
 
 
@@ -178,11 +180,13 @@ public class CtrlPlayer : MonoBehaviour
     {
         if(other.gameObject.tag == "Pacdot")
         {
+            ctrlSound.playEat();
             ctrlGame.dotEated();
             Destroy(other.gameObject);
         }
         else if (other.gameObject.tag == "Power")
         {
+            ctrlSound.playEascape();
             ctrlGame.setEnemiesToEscape();
             Destroy(other.gameObject);
         }
@@ -190,6 +194,7 @@ public class CtrlPlayer : MonoBehaviour
         {
             if(ctrlGame.powerUp == true)
             {
+                ctrlSound.playEatGhost();
                 other.gameObject.GetComponent<BaseEnemyAgent>().stateEnemy = BaseEnemyAgent.StateEnemy.DEADING;
             }
             else
@@ -201,8 +206,15 @@ public class CtrlPlayer : MonoBehaviour
 
     public void respown()
     {
+        ctrlSound.playDead();
         velocity = new Vector3(0, 0, 1);
         anim.SetBool("moving", false);
         gameObject.transform.position = startingPosition;
+        StartCoroutine(restartTrack());
+    }
+    IEnumerator restartTrack()
+    {
+        yield return new WaitForSeconds(1);
+        ctrlSound.restartTrack();
     }
 }
