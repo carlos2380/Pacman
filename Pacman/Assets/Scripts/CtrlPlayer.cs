@@ -99,4 +99,12 @@ public class CtrlPlayer : MonoBehaviour
     {
         gameObject.transform.position = position;
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Pacdot")
+        {
+            Destroy(other.gameObject);
+        } 
+    }
 }
