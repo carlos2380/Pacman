@@ -30,6 +30,8 @@ public class BaseEnemyAgent : MonoBehaviour
     //Deading variables
     [Header("Deading Propierties")]
     public Vector3 waypointRespown;
+    public AnimationCurve curveEnterRespown;
+    public AnimationCurve curveLeaveRespown;
     public float speedAttackingStarting;
     public float speedEscaping;
     public float speedDeading;
@@ -198,11 +200,14 @@ public class BaseEnemyAgent : MonoBehaviour
         {  
            agent.SetDestination(waypointRespown);   
         }
-        if (Vector3.Distance(gameObject.transform.position, agent.destination) < 0.5f)
+        if (Vector3.Distance(gameObject.transform.position, agent.destination) < 0.3f)
         {
-            lastStateEnemy = stateEnemy;
-            stateEnemy = StateEnemy.ATTACKING;
+            agent.nextPosition = startingPosition;
+            agent.enabled = false;
+            gameObject.transform.position = waypointRespown;
+            StartCoroutine(movmentDown());
         }
+
     }
     public void port (Vector3 pos)
     {
@@ -226,4 +231,41 @@ public class BaseEnemyAgent : MonoBehaviour
         gameObject.transform.position = startingPosition;
         stateEnemy = StateEnemy.STARTING;
     }
+
+    IEnumerator movmentDown()
+    {
+        //Speed = time * dist; we know the speed and the dist;
+        Vector3 endPosition = waypointRespown + new Vector3(0, 0, -3f);
+        float totalTime =  3.0f/speedDeading;
+        float time = 0;
+        gameObject.transform.LookAt(Vector3.back + gameObject.transform.position);
+        while (time <= totalTime)
+        {
+            time += Time.deltaTime;
+            gameObject.transform.position = Vector3.Lerp(waypointRespown, endPosition , curveEnterRespown.Evaluate(time));
+            yield return null;
+        }
+        StartCoroutine(movmentUp());
+    }
+
+    IEnumerator movmentUp()
+    {
+        //Speed = time * dist; we know the speed and the dist;
+        float totalTime = 1f;
+        float time = 0;
+        gameObject.transform.LookAt(Vector3.forward + gameObject.transform.position);
+        while (time <= totalTime)
+        {
+            time += Time.deltaTime;
+            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, waypointRespown, curveLeaveRespown.Evaluate(time));
+            yield return null;
+        }
+        gameObject.transform.position = waypointRespown;
+        lastStateEnemy = stateEnemy;
+        stateEnemy = StateEnemy.ATTACKING;
+        agent.enabled = true;
+        agent.speed = speedAttackingStarting;
+    }
+
+    
 }

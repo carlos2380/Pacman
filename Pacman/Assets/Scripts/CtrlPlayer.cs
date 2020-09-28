@@ -119,8 +119,9 @@ public class CtrlPlayer : MonoBehaviour
         {
             if(ctrlGame.powerUp == true)
             {
-
-            }else
+                other.gameObject.GetComponent<BaseEnemyAgent>().stateEnemy = BaseEnemyAgent.StateEnemy.DEADING;
+            }
+            else
             {
                 ctrlGame.loseLife();
             }
